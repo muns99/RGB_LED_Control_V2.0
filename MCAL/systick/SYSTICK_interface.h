@@ -7,9 +7,10 @@ typedef enum __systickErrorState
     SYSTICK_INVALID_ARGS    
 }enu_systickErrorState_t;
 enu_systickErrorState_t SYSTICK_init();
-enu_systickErrorState_t SYSTICK_setTimer(uint16_t   uint16_a_millies);
+enu_systickErrorState_t SYSTICK_setTimer(uint16_t uint16_a_millies,void(*ptr_func_a_sysTickHandler)(void));
 enu_systickErrorState_t SYSTICK_enableInterrupt();
 enu_systickErrorState_t SYSTICK_disableInterrupt();
 enu_systickErrorState_t SYSTICK_start();
 enu_systickErrorState_t SYSTICK_stop();
+enu_systickErrorState_t SYSTICK_deInit();
 #endif // !SYSTICK_INTERFACE_H_
