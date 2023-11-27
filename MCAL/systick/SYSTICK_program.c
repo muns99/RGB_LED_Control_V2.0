@@ -3,6 +3,9 @@
 #include "SYSTICK_private.h"
 #include "SYSTICK_interface.h"
 #include "SYSTICK_config.h"
+#include "TM4C123.h"
+#include "core_cm4.h" 
+void(*prt_func_gl_sysTickHandler)(void) = NULL;
 enu_systickErrorState_t SYSTICK_init()
 {
     enu_systickErrorState_t enu_a_functionRet = SYSTICK_SSUCCESS;
@@ -14,11 +17,20 @@ enu_systickErrorState_t SYSTICK_init()
     #endif // PIOSC
     return enu_a_functionRet;
 }
-enu_systickErrorState_t SYSTICK_setTimer(uint16_t uint16_a_millies)
+enu_systickErrorState_t SYSTICK_setTimer(uint16_t uint16_a_millies,void(*ptr_func_a_sysTickHandler)(void))
 {
     enu_systickErrorState_t enu_a_functionRet = SYSTICK_SSUCCESS;
     if (uint16_a_millies <= MAX_TIME_INTERVAL)
     {
+        if (ptr_func_a_sysTickHandler != NULL)
+        {
+            prt_func_gl_sysTickHandler = ptr_func_a_sysTickHandler;
+        }
+        else
+        {
+            enu_a_functionRet = SYSTICK_INVALID_ARGS;
+        }
+        
         STRELOAD &= ZERO_MASK;
         STRELOAD |= CALC_RELOAD(uint16_a_millies);
     }
@@ -34,6 +46,8 @@ enu_systickErrorState_t SYSTICK_enableInterrupt()
     if (GET_BIT(STCTRL,STCTRL_INTEN) == ZERO_MASK)
     {
         SET_BIT(STCTRL,STCTRL_INTEN);
+        NVIC_EnableIRQ(SysTick_IRQn);
+        __enable_irq();
     }
     else
     {
@@ -79,4 +93,17 @@ enu_systickErrorState_t SYSTICK_stop()
         enu_a_functionRet = SYSTICK_NOT_SSUCCESS;
     }
     return enu_a_functionRet;
+}
+ 
+void SysTick_Handler()
+{
+    if (prt_func_gl_sysTickHandler != NULL)
+    {
+        prt_func_gl_sysTickHandler();
+    }
+    else
+    {
+        /*do nothing*/
+    }
+    
 }
