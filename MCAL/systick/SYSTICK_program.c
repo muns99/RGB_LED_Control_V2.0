@@ -94,7 +94,16 @@ enu_systickErrorState_t SYSTICK_stop()
     }
     return enu_a_functionRet;
 }
- 
+enu_systickErrorState_t SYSTICK_deInit()
+{
+    enu_systickErrorState_t enu_a_functionRet = SYSTICK_SSUCCESS;
+    SET_BIT(STCTRL,STCTRL_CLK_SRC);
+    CLR_BIT(STCTRL,STCTRL_ENABLE);
+    CLR_BIT(STCTRL,STCTRL_COUNT);
+    CLR_BIT(STCTRL,STCTRL_INTEN);
+    prt_func_gl_sysTickHandler = NULL;
+    return enu_a_functionRet;
+}
 void SysTick_Handler()
 {
     if (prt_func_gl_sysTickHandler != NULL)

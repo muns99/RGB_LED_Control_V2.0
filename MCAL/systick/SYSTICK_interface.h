@@ -12,4 +12,5 @@ enu_systickErrorState_t SYSTICK_enableInterrupt();
 enu_systickErrorState_t SYSTICK_disableInterrupt();
 enu_systickErrorState_t SYSTICK_start();
 enu_systickErrorState_t SYSTICK_stop();
+enu_systickErrorState_t SYSTICK_deInit();
 #endif // !SYSTICK_INTERFACE_H_
