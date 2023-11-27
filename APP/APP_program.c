@@ -1,0 +1,5 @@
+#include "../LIB/std_types.h"
+#include "../HAL/led/led_interface.h"
+#include "../HAL/button/button_interface.h"
+#include "APP_interface.h"
+#include "APP_config.h"
