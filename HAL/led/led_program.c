@@ -59,7 +59,7 @@ enu_ledErrorState_t LED_intervalStart(st_led_t *st_a_led,uint16_t uint16_a_inter
     {
         if ( SYSTICK_init() == SYSTICK_SSUCCESS)
         {
-            if (SYSTICK_setTimer(st_a_led->ptr_func_ledCallBack) == SYSTICK_SSUCCESS)
+            if (SYSTICK_setTimerCallBack(st_a_led->ptr_func_ledCallBack) == SYSTICK_SSUCCESS)
             {
                 if (SYSTICK_enableInterrupt() == SYSTICK_SSUCCESS)
                 {

@@ -33,10 +33,10 @@ typedef struct __sysTickTask
 enu_systickManagerErrorState_t ST_MANAGER_init();
 enu_systickManagerErrorState_t ST_MANAGER_start();
 enu_systickManagerErrorState_t ST_MANAGER_stop();
-enu_systickManagerErrorState_t ST_MANAGER_createTask(str_sysTickTAsk *str_a_task);
+enu_systickManagerErrorState_t ST_MANAGER_createTask(str_sysTickTask_t *str_a_task);
 enu_systickManagerErrorState_t ST_MANAGER_reStartTask(uint8_t uint8_a_taskID);
 enu_systickManagerErrorState_t ST_MANAGER_deleteTask(uint8_t uint8_a_taskID);
-enu_systickManagerErrorState_t ST_MANAGER_modifyTask(uint8_t uint8_a_taskID,str_sysTickTAsk *str_a_task);
+enu_systickManagerErrorState_t ST_MANAGER_modifyTask(uint8_t uint8_a_taskID,str_sysTickTask_t *str_a_task);
 void ST_MANAGER_dispatcher();
 
 

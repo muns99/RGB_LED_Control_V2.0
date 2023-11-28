@@ -1,4 +1,4 @@
-#include "../std_types.h"
+#include "../../LIB/std_types.h"
 #include "../../MCAL/systick/SYSTICK_interface.h"
 #include "ST_MANAGER_interface.h"
 str_sysTickTask_t str_gl_tasks[TASKS_COUNT]= {0};
@@ -6,7 +6,7 @@ void ST_MANAGER_manageTasks()
 {
     for (uint8_t uint8_a_tasksIterator = 0; uint8_a_tasksIterator < TASKS_COUNT; uint8_a_tasksIterator++)
         {
-            if(str_gl_tasks[uint8_a_tasksIterator] != NULL)
+            if(str_gl_tasks[uint8_a_tasksIterator].taskInterval != 0)
             {
                 if (str_gl_tasks[uint8_a_tasksIterator].taskState == TASK_WAITING)
                 {
@@ -17,17 +17,13 @@ void ST_MANAGER_manageTasks()
                     }
                 }
             }
-            else
-            {
-                enu_a_functionRet = SYSTICK_NOT_SUCCES;
-            }
         }
 }
 void ST_MANAGER_dispatcher()
 {
      for (uint8_t uint8_a_tasksIterator = 0; uint8_a_tasksIterator < TASKS_COUNT; uint8_a_tasksIterator++)
         {
-            if(str_gl_tasks[uint8_a_tasksIterator] != NULL)
+            if(str_gl_tasks[uint8_a_tasksIterator].taskInterval != 0)
             {
                 if (str_gl_tasks[uint8_a_tasksIterator].taskState == TASK_READY)
                 {
@@ -65,18 +61,18 @@ enu_systickManagerErrorState_t ST_MANAGER_init()
                 }
                 else
                 {
-                    enu_a_functionRet = SYSTICK_NOT_SUCCES;
+                    enu_a_functionRet = ST_MANAGER_NOT_SUCCESS;
                 }
             }
              else
             {
-                enu_a_functionRet = SYSTICK_NOT_SUCCES;
+                enu_a_functionRet = ST_MANAGER_NOT_SUCCESS;
             }
             
         }
         else
         {
-            enu_a_functionRet = SYSTICK_NOT_SUCCES;
+            enu_a_functionRet = ST_MANAGER_NOT_SUCCESS;
         }
          
 
@@ -91,7 +87,7 @@ enu_systickManagerErrorState_t ST_MANAGER_start()
     }
     else
     {
-        enu_a_functionRet = SYSTICK_NOT_SUCCES;
+        enu_a_functionRet = ST_MANAGER_NOT_SUCCESS;
     }
     return enu_a_functionRet;
 
@@ -105,7 +101,7 @@ enu_systickManagerErrorState_t ST_MANAGER_stop()
     }
     else
     {
-        enu_a_functionRet = SYSTICK_NOT_SUCCES;
+        enu_a_functionRet = ST_MANAGER_NOT_SUCCESS;
     }
     return enu_a_functionRet;
 }
@@ -116,7 +112,7 @@ enu_systickManagerErrorState_t ST_MANAGER_createTask(str_sysTickTask_t *str_a_ta
     {
         for (uint8_t uint8_a_tasksIterator = 0; uint8_a_tasksIterator < TASKS_COUNT; uint8_a_tasksIterator++)
         {
-            if(str_gl_tasks[uint8_a_tasksIterator] == NULL)
+            if(str_gl_tasks[uint8_a_tasksIterator].taskInterval == 0)
             {
                 str_gl_tasks[uint8_a_tasksIterator] = *str_a_task;
                 str_gl_tasks[uint8_a_tasksIterator].taskState = TASK_STOPED;
@@ -126,14 +122,14 @@ enu_systickManagerErrorState_t ST_MANAGER_createTask(str_sysTickTask_t *str_a_ta
             }
             else
             {
-                enu_a_functionRet = SYSTICK_NOT_SUCCES;
+                enu_a_functionRet = ST_MANAGER_NOT_SUCCESS;
             }
         }
         
     }
     else
     {
-        enu_a_functionRet = SYSTICK_NOT_SUCCES;
+        enu_a_functionRet = ST_MANAGER_NOT_SUCCESS;
     }
     return enu_a_functionRet;
     
@@ -144,7 +140,7 @@ enu_systickManagerErrorState_t ST_MANAGER_reStartTask(uint8_t uint8_a_taskID)
     enu_systickManagerErrorState_t enu_a_functionRet = ST_MANAGER_SUCCESS;
     for (uint8_t uint8_a_tasksIterator = 0; uint8_a_tasksIterator < TASKS_COUNT; uint8_a_tasksIterator++)
     {
-        if(str_gl_tasks[uint8_a_tasksIterator].taskID == uint8_a_taskID)
+        if(str_gl_tasks[uint8_a_tasksIterator].taskId == uint8_a_taskID)
         {
             str_gl_tasks[uint8_a_tasksIterator].taskState = TASK_WAITING;
             enu_a_functionRet = ST_MANAGER_SUCCESS;
@@ -152,7 +148,7 @@ enu_systickManagerErrorState_t ST_MANAGER_reStartTask(uint8_t uint8_a_taskID)
         }
         else
         {
-            enu_a_functionRet = SYSTICK_NOT_SUCCES;
+            enu_a_functionRet = ST_MANAGER_NOT_SUCCESS;
         }
     }
         return enu_a_functionRet;
@@ -162,7 +158,7 @@ enu_systickManagerErrorState_t ST_MANAGER_deleteTask(uint8_t uint8_a_taskID)
 
 }
 
-enu_systickManagerErrorState_t ST_MANAGER_modifyTask(uint8_t uint8_a_taskID,str_sysTickTAsk *str_a_task)
+enu_systickManagerErrorState_t ST_MANAGER_modifyTask(uint8_t uint8_a_taskID,str_sysTickTask_t *str_a_task)
 {
 
 }

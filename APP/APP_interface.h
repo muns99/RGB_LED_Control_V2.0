@@ -10,4 +10,5 @@ typedef enum __appErrorState
 enu_appErrorState_t APP_init();
 enu_appErrorState_t APP_start();
 enu_appErrorState_t APP_stop();
+void APP_routine();
 #endif /*APP_INTERFACE_H_*/

@@ -44,7 +44,8 @@ str_sysTickTask_t str_gl_blueLedTask = {
 str_sysTickTask_t str_gl_allLedsTask = {
     .taskId = 3,
     .taskInterval = 1000,
-    .taskPeriodicity = TASK_ONE_SHOT
+    .taskPeriodicity = TASK_ONE_SHOT,
+    .ptr_func_taskHandler = APP_allLedsRoutine
 };
 
 void debounce()
@@ -60,13 +61,13 @@ void APP_firstPress(void)
 }
 void APP_secondPress(void)
 {
-    LED_off(&st_g_redLed);
+    //LED_off(&st_g_redLed);
     LED_on(&st_g_greenLed);
     ST_MANAGER_reStartTask(str_gl_greenLedTask.taskId);
 }
 void APP_thirdPress(void)
 {
-    LED_off(&st_g_greenLed);
+   // LED_off(&st_g_greenLed);
     LED_on(&st_g_blueLed);
     ST_MANAGER_reStartTask(str_gl_blueLedTask.taskId);
 }
