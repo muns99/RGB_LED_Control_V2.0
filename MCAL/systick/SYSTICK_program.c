@@ -17,27 +17,20 @@ enu_systickErrorState_t SYSTICK_init()
     #endif // PIOSC
     return enu_a_functionRet;
 }
-enu_systickErrorState_t SYSTICK_setTimer(uint16_t uint16_a_millies,void(*ptr_func_a_sysTickHandler)(void))
+enu_systickErrorState_t SYSTICK_setTimerCallBack(void(*ptr_func_a_sysTickHandler)(void))
 {
     enu_systickErrorState_t enu_a_functionRet = SYSTICK_SSUCCESS;
-    if (uint16_a_millies <= MAX_TIME_INTERVAL)
-    {
-        if (ptr_func_a_sysTickHandler != NULL)
-        {
-            prt_func_gl_sysTickHandler = ptr_func_a_sysTickHandler;
-        }
-        else
-        {
-            enu_a_functionRet = SYSTICK_INVALID_ARGS;
-        }
-        
-        STRELOAD &= ZERO_MASK;
-        STRELOAD |= CALC_RELOAD(uint16_a_millies);
-    }
-    else
-    {
-        enu_a_functionRet = SYSTICK_INVALID_ARGS;
-    }
+   
+			if (ptr_func_a_sysTickHandler != NULL)
+			{
+					
+					prt_func_gl_sysTickHandler = ptr_func_a_sysTickHandler;
+			}
+			else
+			{
+					enu_a_functionRet = SYSTICK_INVALID_ARGS;
+			}
+    
     return enu_a_functionRet;
 }
 enu_systickErrorState_t SYSTICK_enableInterrupt()
@@ -68,17 +61,13 @@ enu_systickErrorState_t SYSTICK_disableInterrupt()
     }
     return enu_a_functionRet;
 }
-enu_systickErrorState_t SYSTICK_start()
+enu_systickErrorState_t SYSTICK_start(uint16_t uint16_a_millies)
 {
     enu_systickErrorState_t enu_a_functionRet = SYSTICK_SSUCCESS;
-    if (GET_BIT(STCTRL,STCTRL_ENABLE) == ZERO_MASK)
-    {
-        SET_BIT(STCTRL,STCTRL_ENABLE);
-    }
-    else
-    {
-        enu_a_functionRet = SYSTICK_NOT_SSUCCESS;
-    }
+    SET_BIT(STCTRL,STCTRL_ENABLE);
+	STRELOAD &= ZERO_MASK;
+    STRELOAD = CALC_RELOAD(uint16_a_millies);//CALC_RELOAD(uint16_a_millies);
+   
     return enu_a_functionRet;
 }
 enu_systickErrorState_t SYSTICK_stop()
@@ -87,6 +76,7 @@ enu_systickErrorState_t SYSTICK_stop()
     if (GET_BIT(STCTRL,STCTRL_ENABLE) != ZERO_MASK)
     {
         CLR_BIT(STCTRL,STCTRL_ENABLE);
+        STRELOAD = ZERO_MASK;
     }
     else
     {

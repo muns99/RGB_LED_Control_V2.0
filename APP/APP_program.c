@@ -41,14 +41,17 @@ void APP_fifthPress(void)
 }
 void APP_redLedRoutine()
 {
+    LED_off(&st_g_redLed);
     LED_intervalStop(&st_g_redLed);
 }
 void APP_greenLedRoutine()
 {
+    LED_off(&st_g_greenLed);
     LED_intervalStop(&st_g_greenLed);
 }
 void APP_blueLedRoutine()
 {
+    LED_off(&st_g_blueLed);
     LED_intervalStop(&st_g_blueLed);
 }
 void (*ptr_func_appSequenceFunctions[])(void) = {APP_firstPress,APP_secondPress,APP_thirdPress,APP_fourthPress,APP_fifthPress};

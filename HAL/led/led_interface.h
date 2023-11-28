@@ -47,7 +47,8 @@ typedef struct __led
 
 enu_ledErrorState_t LED_init(st_led_t *st_a_led);
 enu_ledErrorState_t LED_on(st_led_t *st_a_led);
-enu_ledErrorState_t LED_intervalOn(st_led_t *st_a_led,uint16_t uint16_a_interval);
+enu_ledErrorState_t LED_intervalStart(st_led_t *st_a_led,uint16_t uint16_a_interval);
+enu_ledErrorState_t LED_intervalStop(st_led_t *st_a_led );
 enu_ledErrorState_t LED_off(st_led_t *st_a_led);
 enu_ledErrorState_t LED_toggle(st_led_t *st_a_led);
 
