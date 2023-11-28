@@ -12,7 +12,8 @@ typedef enum __taskState
 {
     TASK_READY      = 0 ,
     TASK_STOPED         ,
-    TASK_RUNNING        
+    TASK_RUNNING        ,
+    TASK_WAITING     
 }enu_taskState_t;
 typedef enum __taskPeriodicity
 {
@@ -22,18 +23,21 @@ typedef enum __taskPeriodicity
 typedef struct __sysTickTask
 {
     uint16_t taskInterval;
-    uint16_t taskRemening;
+    uint16_t taskRemaining;
     uint8_t  taskId;
     enu_taskState_t taskState;
     enu_taskPeriodicity_t taskPeriodicity;
+    void(*ptr_func_taskHandler)(void);
 }str_sysTickTask_t;
 
 enu_systickManagerErrorState_t ST_MANAGER_init();
-enu_systickManagerErrorState_t ST_MANAGER_strat();
+enu_systickManagerErrorState_t ST_MANAGER_start();
 enu_systickManagerErrorState_t ST_MANAGER_stop();
 enu_systickManagerErrorState_t ST_MANAGER_createTask(str_sysTickTAsk *str_a_task);
+enu_systickManagerErrorState_t ST_MANAGER_reStartTask(uint8_t uint8_a_taskID);
 enu_systickManagerErrorState_t ST_MANAGER_deleteTask(uint8_t uint8_a_taskID);
 enu_systickManagerErrorState_t ST_MANAGER_modifyTask(uint8_t uint8_a_taskID,str_sysTickTAsk *str_a_task);
+void ST_MANAGER_dispatcher();
 
 
 #endif // !ST_MANAGER_INTERFACE_H_

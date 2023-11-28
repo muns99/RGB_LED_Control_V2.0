@@ -8,10 +8,10 @@ void ST_MANAGER_manageTasks()
         {
             if(str_gl_tasks[uint8_a_tasksIterator] != NULL)
             {
-                if (str_gl_tasks[uint8_a_tasksIterator].taskState != TASK_READY || str_gl_tasks[uint8_a_tasksIterator].taskState != TASK_RUNNING)
+                if (str_gl_tasks[uint8_a_tasksIterator].taskState == TASK_WAITING)
                 {
-                    str_gl_tasks[uint8_a_tasksIterator].taskRemening--;
-                    if (str_gl_tasks[uint8_a_tasksIterator].taskRemening == 0)
+                    str_gl_tasks[uint8_a_tasksIterator].taskRemaining--;
+                    if (str_gl_tasks[uint8_a_tasksIterator].taskRemaining == 0)
                     {
                         str_gl_tasks[uint8_a_tasksIterator].taskState = TASK_READY;
                     }
@@ -22,6 +22,34 @@ void ST_MANAGER_manageTasks()
                 enu_a_functionRet = SYSTICK_NOT_SUCCES;
             }
         }
+}
+void ST_MANAGER_dispatcher()
+{
+     for (uint8_t uint8_a_tasksIterator = 0; uint8_a_tasksIterator < TASKS_COUNT; uint8_a_tasksIterator++)
+        {
+            if(str_gl_tasks[uint8_a_tasksIterator] != NULL)
+            {
+                if (str_gl_tasks[uint8_a_tasksIterator].taskState == TASK_READY)
+                {
+                    str_gl_tasks[uint8_a_tasksIterator].taskState = TASK_RUNNING;
+                    if( str_gl_tasks[uint8_a_tasksIterator].ptr_func_taskHandler != NULL)
+                    {
+                        str_gl_tasks[uint8_a_tasksIterator].ptr_func_taskHandler();
+                    }
+                    str_gl_tasks[uint8_a_tasksIterator].taskRemaining = str_gl_tasks[uint8_a_tasksIterator].taskInterval;
+                    if (str_gl_tasks[uint8_a_tasksIterator].taskPeriodicity == TASK_PERIODIC)
+                    {
+                        str_gl_tasks[uint8_a_tasksIterator].taskState = TASK_WAITING;
+                    }
+                    else
+                    {
+                        str_gl_tasks[uint8_a_tasksIterator].taskState = TASK_STOPED;
+                    }
+                    
+                }
+            }
+        }
+
 }
 enu_systickManagerErrorState_t ST_MANAGER_init()
 {
@@ -92,8 +120,9 @@ enu_systickManagerErrorState_t ST_MANAGER_createTask(str_sysTickTask_t *str_a_ta
             {
                 str_gl_tasks[uint8_a_tasksIterator] = *str_a_task;
                 str_gl_tasks[uint8_a_tasksIterator].taskState = TASK_STOPED;
-                str_gl_tasks[uint8_a_tasksIterator].taskRemening = str_gl_tasks[uint8_a_tasksIterator].taskInterval;
+                str_gl_tasks[uint8_a_tasksIterator].taskRemaining = str_gl_tasks[uint8_a_tasksIterator].taskInterval;
                 enu_a_functionRet = ST_MANAGER_SUCCESS;
+                break;
             }
             else
             {
@@ -110,10 +139,29 @@ enu_systickManagerErrorState_t ST_MANAGER_createTask(str_sysTickTask_t *str_a_ta
     
 
 }
+enu_systickManagerErrorState_t ST_MANAGER_reStartTask(uint8_t uint8_a_taskID)
+{
+    enu_systickManagerErrorState_t enu_a_functionRet = ST_MANAGER_SUCCESS;
+    for (uint8_t uint8_a_tasksIterator = 0; uint8_a_tasksIterator < TASKS_COUNT; uint8_a_tasksIterator++)
+    {
+        if(str_gl_tasks[uint8_a_tasksIterator].taskID == uint8_a_taskID)
+        {
+            str_gl_tasks[uint8_a_tasksIterator].taskState = TASK_WAITING;
+            enu_a_functionRet = ST_MANAGER_SUCCESS;
+            break;
+        }
+        else
+        {
+            enu_a_functionRet = SYSTICK_NOT_SUCCES;
+        }
+    }
+        return enu_a_functionRet;
+}
 enu_systickManagerErrorState_t ST_MANAGER_deleteTask(uint8_t uint8_a_taskID)
 {
 
 }
+
 enu_systickManagerErrorState_t ST_MANAGER_modifyTask(uint8_t uint8_a_taskID,str_sysTickTAsk *str_a_task)
 {
 
